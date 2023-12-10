@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/arkanoid.dir/main.cpp.o -o arkanoid 

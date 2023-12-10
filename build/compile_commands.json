@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/arkanoid.dir/main.cpp.o -c /home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/src/main.cpp",
+  "file": "/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/src/main.cpp"
+}
+]
