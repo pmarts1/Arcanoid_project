@@ -2,6 +2,7 @@
 #include <math.h>
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <list>
 using namespace std;
 using namespace sf;
 
@@ -9,6 +10,7 @@ struct Platform{
     public:
         float speed;
         sf::RectangleShape platform;
+        float length = 200;
         int direction;
         Platform(const sf::Vector2f & size, const sf::Vector2f & position, const sf::Color & color, float speed){
             platform.setSize(size);
@@ -36,11 +38,15 @@ struct Block{
     public:
         sf::Color clr;
         sf::RectangleShape block;
+        float length;
+        float height;
         Block(const sf::Vector2f & size, const sf::Vector2f & position, const sf::Color & color){
             block.setSize(size);
             block.setFillColor(color);
             block.setPosition(position);
             clr = color;
+            length = size.x;
+            height = size.y;
         };
         float x(){
             return block.getPosition().x;
@@ -53,7 +59,7 @@ struct Block{
 struct Ball{
     public:
         sf::CircleShape ball;
-        sf::Vector2f velocity = Vector2f(2.f, -2.f);
+        sf::Vector2f velocity = Vector2f(4.f, -4.f);
         Ball(float r, const sf::Vector2f start_position, const sf::Color & color){
             ball.setRadius(r);
             ball.setFillColor(color);
@@ -70,7 +76,7 @@ struct Ball{
         }
         
         void Colision(Platform & pl){
-            if(fabs(pl.x() - this->x()) < 200 and (ball.getPosition().y > 860)){
+            if(fabs(pl.x() + pl.length/2 - this->x()) < pl.length/2 and fabs((this->y() - 860)) < 3){
                 velocity = Vector2f(velocity.x, -velocity.y);
             }
         }
@@ -85,27 +91,40 @@ struct Ball{
                 velocity = Vector2f(velocity.x, -velocity.y);
             }
         }
-        void Colision(Block & bl){
-            if(fabs(bl.x() - this->x()) < 30 and (fabs(bl.y() - this->y()) < 20)){
-                bl.block.setFillColor(sf::Color::Yellow);
+        bool Colision(Block & bl){
+            if((this->x() - bl.x()) < bl.length and (this->x() - bl.x()) > 0 and ((-bl.y() + this->y()) < bl.height) and ((-bl.y() + this->y()) > 0)){
+                //bl.block.setFillColor(sf::Color::Yellow);
+                if(this->x() - (bl.x() + bl.length/2) > bl.length/bl.height*fabs(this->y() - (bl.y() + bl.height/2))){
+                    velocity = Vector2f(-velocity.x, velocity.y);
+                }
+                else if(-(this->x() - (bl.x() + bl.length/2)) > bl.length/bl.height*fabs(this->y() - (bl.y() + bl.height/2))){
+                    velocity = Vector2f(-velocity.x, velocity.y);
+                }
+                else{
+                    velocity = Vector2f(velocity.x, -velocity.y);
+                }
+                
+                return 1;
             }
+            return 0;
         }
 };
 
 int main()
 {
-    vector<Block> blocks;
+    list<Block> blocks;
     for(int i = 0; i < 5; i++){
         float x = 200*i;
         blocks.push_back(Block(sf::Vector2f(100.f, 40.f), sf::Vector2f(x, 400.f), sf::Color::Green));
     }
+    blocks.push_back(Block(sf::Vector2f(100.f, 40.f), sf::Vector2f(1400.f, 400.f), sf::Color::Green));
     float timer;
     float time_k = 0.1;
     float time;
     sf::Clock clock;
     RenderWindow window(sf::VideoMode(1600, 900), "Arkanoid");
     Platform p(sf::Vector2f(200.f, 20.f), sf::Vector2f(0.f, 880.f), sf::Color::Red, 10.f);
-    Ball b(10, sf::Vector2f(500.f, 500.f), sf::Color::Black);
+    Ball b(5, sf::Vector2f(800.f, 420.f), sf::Color::Black);
     window.setFramerateLimit(60);
     while (window.isOpen())
     {
@@ -123,8 +142,11 @@ int main()
         }
         b.Colision(p);
         b.Colision();
-        for(int i = 0; i < 5; i++){
-            b.Colision(blocks[i]);
+        for(list<Block>::iterator it = blocks.begin(); it != blocks.end(); it++){
+            if(b.Colision(*it)){
+                blocks.erase(it);
+                break;
+            }
         }
         sf::Time elapsed = clock.getElapsedTime();
         timer = clock.restart().asMilliseconds();
@@ -134,11 +156,11 @@ int main()
         window.clear(sf::Color::White);
         window.draw(p.platform);
         window.draw(b.ball);
-        for(int i = 0; i < 5; i++){
-            window.draw(blocks[i].block);
+        for(list<Block>::iterator it = blocks.begin(); it != blocks.end(); it++){
+            window.draw((*it).block);
         }
         window.display();
-        cout << p.x() << endl;
+        //cout << p.x() << endl;
     }
     return 0;
 }
