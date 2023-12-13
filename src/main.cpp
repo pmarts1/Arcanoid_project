@@ -106,14 +106,28 @@ struct Ball{
                 else{
                     velocity = Vector2f(velocity.x, -velocity.y);
                 }
-                
                 return 1;
             }
             return 0;
         }
 };
 
+
+void WriteScore(RenderWindow &window, int score){
+    sf::Text text;
+    sf::Font font;
+    text.setFillColor(sf::Color::Black);
+    font.loadFromFile("freesansbold.ttf");
+    text.setFont(font);
+    text.setStyle(sf::Text::Bold);
+    text.setCharacterSize(100);
+    text.setString(to_string(score));
+    text.setPosition(1400, 200);
+    window.draw(text);
+
+}
 void Game(RenderWindow &window, sf::Clock clock){
+    int score = 0;
     list<Block> blocks;
     for(int j = 0; j < 5; j++){
         float h = 100*j;
@@ -149,6 +163,7 @@ void Game(RenderWindow &window, sf::Clock clock){
         for(list<Block>::iterator it = blocks.begin(); it != blocks.end(); it++){
             if(b.Colision(*it)){
                 blocks.erase(it);
+                score++;
                 break;
             }
         }
@@ -163,10 +178,13 @@ void Game(RenderWindow &window, sf::Clock clock){
         for(list<Block>::iterator it = blocks.begin(); it != blocks.end(); it++){
             window.draw((*it).block);
         }
+        WriteScore(window, score);
         window.display();
         //cout << p.x() << endl;
     }
 }
+
+
 
 void Menu(RenderWindow &window){
     sf::Text text;
