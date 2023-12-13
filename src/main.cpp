@@ -5,7 +5,10 @@
 #include <list>
 using namespace std;
 using namespace sf;
+#define ScreenX  1600
+#define ScreenY 900
 
+int opt = 0;
 struct Platform{
     public:
         float speed;
@@ -20,10 +23,10 @@ struct Platform{
         };
 
         void Update(float dt){
-            if(direction == -1){
+            if((direction == -1) and (this->x() > 0)){
                 platform.move(-speed*dt, 0.f);
             }
-            if(direction == 1){
+            if((direction == 1) and (this->x() + length  < ScreenX)){
                 platform.move(speed*dt, 0.f);
             }
         }
@@ -110,22 +113,23 @@ struct Ball{
         }
 };
 
-int main()
-{
+void Game(RenderWindow &window, sf::Clock clock){
     list<Block> blocks;
-    for(int i = 0; i < 5; i++){
+    for(int j = 0; j < 5; j++){
+        float h = 100*j;
+    for(int i = 0; i < 7; i++){
         float x = 200*i;
-        blocks.push_back(Block(sf::Vector2f(100.f, 40.f), sf::Vector2f(x, 400.f), sf::Color::Green));
+        blocks.push_back(Block(sf::Vector2f(100.f, 40.f), sf::Vector2f(x, h), sf::Color::Magenta));
     }
-    blocks.push_back(Block(sf::Vector2f(100.f, 40.f), sf::Vector2f(1400.f, 400.f), sf::Color::Green));
+    }
+    //blocks.push_back(Block(sf::Vector2f(100.f, 40.f), sf::Vector2f(1400.f, 400.f), sf::Color::Green));
     float timer;
     float time_k = 0.1;
     float time;
-    sf::Clock clock;
-    RenderWindow window(sf::VideoMode(1600, 900), "Arkanoid");
+    
     Platform p(sf::Vector2f(200.f, 20.f), sf::Vector2f(0.f, 880.f), sf::Color::Red, 10.f);
     Ball b(5, sf::Vector2f(800.f, 420.f), sf::Color::Black);
-    window.setFramerateLimit(60);
+    
     while (window.isOpen())
     {
         Event event;
@@ -161,6 +165,60 @@ int main()
         }
         window.display();
         //cout << p.x() << endl;
+    }
+}
+
+void Menu(RenderWindow &window){
+    sf::Text text;
+    vector<string> options = {"Play", "Settings", "Records", "Quit"};
+    sf::Font font;
+    text.setFillColor(sf::Color::Black);
+    font.loadFromFile("freesansbold.ttf");
+    text.setFont(font);
+    text.setStyle(sf::Text::Bold);
+    text.setCharacterSize(80);
+    while (window.isOpen())
+    {
+    Event event;
+    while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) and (opt < 3)){
+                opt++;
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) and (opt > 0)){
+                opt--;
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
+                return;
+            }
+    {
+    window.clear(sf::Color::White);
+    for(int i = 0; i < 4; i++){
+        if(i == opt)
+            text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+        else
+            text.setStyle(sf::Text::Bold);
+        text.setString(options[i]);
+        text.setPosition(ScreenX/2 - text.getLocalBounds().width/2, 200*i);
+        window.draw(text);
+    }
+    window.display();
+    }
+    }
+    }
+}
+
+int main()
+{
+    sf::Clock clock;
+    RenderWindow window(sf::VideoMode(ScreenX, ScreenY), "Arkanoid");
+    window.setFramerateLimit(60);
+    Menu(window);
+    switch(opt){
+        case 0: Game(window, clock);
+        case 3: window.close();
     }
     return 0;
 }
