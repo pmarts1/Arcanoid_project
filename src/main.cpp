@@ -9,7 +9,7 @@ using namespace sf;
 #define ScreenX 1600
 #define ScreenY 900
 
-int opt = -1;
+int opt = 0;
 auto PlatformColor = sf::Color::Black;
 
 struct Platform
@@ -74,7 +74,7 @@ struct Ball
 {
 public:
     sf::CircleShape ball;
-    sf::Vector2f velocity = Vector2f(-4.f,-4.f);
+    sf::Vector2f velocity = Vector2f(-4.f, -4.f);
     Ball(float r, const sf::Vector2f start_position, const sf::Color &color)
     {
         ball.setRadius(r);
@@ -83,7 +83,6 @@ public:
     };
     void Update(float dt)
     {
-        cout << dt << endl;
         ball.move(velocity * dt);
     }
     float x()
@@ -140,6 +139,13 @@ public:
     }
 };
 
+void clearEventsQueue(RenderWindow &window)
+{
+    sf::Event event;
+    while (window.pollEvent(event));
+}
+
+
 void WriteScore(RenderWindow &window, int score)
 {
     sf::Text text;
@@ -156,30 +162,35 @@ void WriteScore(RenderWindow &window, int score)
 
 void PlatformColorChoice(RenderWindow &window)
 {
-    vector<sf::Color> clrs= {sf::Color::Black, sf::Color::Blue, sf::Color::Cyan, sf::Color::Green, sf::Color::Magenta, sf::Color::Red};
+    vector<sf::Color> clrs = {sf::Color::Black, sf::Color::Blue, sf::Color::Cyan, sf::Color::Green, sf::Color::Magenta, sf::Color::Red};
     while (window.isOpen())
     {
         window.clear(sf::Color::White);
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed){
-                cout << "quit1" << endl;window.close();}
+            if (event.type == sf::Event::Closed)
+            {
+                cout << "quit1" << endl;
+                window.close();
+            }
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
                 sf::Vector2i globalPosition = sf::Mouse::getPosition(window);
-                if(globalPosition.y > (ScreenY / 4) and globalPosition.y < (ScreenY / 4 + 100)){
-                    for(int i = 0; i < 6; i++){
-                    if(globalPosition.x > (ScreenX / 7 * (i + 1) - 50) and globalPosition.x < (ScreenX / 7 * (i + 1) +50)){
-                        PlatformColor = clrs[i];
-                        return;
+                if (globalPosition.y > (ScreenY / 4) and globalPosition.y < (ScreenY / 4 + 100))
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (globalPosition.x > (ScreenX / 7 * (i + 1) - 50) and globalPosition.x < (ScreenX / 7 * (i + 1) + 50))
+                        {
+                            PlatformColor = clrs[i];
+                            return;
+                        }
                     }
-                    }
-
                 }
             }
         }
-       
+
         vector<sf::CircleShape> circles;
         for (int i = 0; i < 6; i++)
         {
@@ -192,12 +203,40 @@ void PlatformColorChoice(RenderWindow &window)
     }
 }
 
-/*
-void lose(int score){
-
+void lose(int score, RenderWindow &window)
+{
+    window.clear(sf::Color::White);
+    sf::Text text;
+    sf::Font font;
+    text.setFillColor(sf::Color::Black);
+    font.loadFromFile("freesansbold.ttf");
+    text.setFont(font);
+    text.setStyle(sf::Text::Bold);
+    text.setCharacterSize(100);
+    text.setString(to_string(score));
+    text.setPosition(ScreenX/2 - text.getLocalBounds().width / 2, 200);
+    window.draw(text);
+    window.display();
+    
+    clearEventsQueue(window);
+    sf::Event event;
+    while(1){
+    while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+            {
+                return;
+            }
+        }
+    }
 }
-*/
-void readScore(RenderWindow &window){
+
+void readScore(RenderWindow &window)
+{
     std::ifstream in("score.txt");
     std::string line;
     sf::Text text;
@@ -208,28 +247,31 @@ void readScore(RenderWindow &window){
     text.setStyle(sf::Text::Bold);
     text.setCharacterSize(100);
     window.clear(sf::Color::White);
-    
+
     if (in.is_open())
     {
         int i = 0;
         while (std::getline(in, line))
         {
             i++;
-            
+
             text.setString(line);
-            text.setPosition(ScreenX/2 -text.getLocalBounds().width / 2, i*100);
+            text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, i * 100);
             window.draw(text);
         }
     }
     window.display();
-    sf::Event event;
-    while (window.pollEvent(event));
-    while(1 < 4){
-    sf::Event event;
-    while (window.pollEvent(event))
+    clearEventsQueue(window);
+    while (1)
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed){
-                cout << "quit1" << endl;window.close();}
+            if (event.type == sf::Event::Closed)
+            {
+                cout << "quit1" << endl;
+                window.close();
+            }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
             {
                 return;
@@ -237,7 +279,9 @@ void readScore(RenderWindow &window){
         }
     }
 }
-void Game(RenderWindow &window, sf::Clock clock)
+
+
+int Game(RenderWindow &window, sf::Clock clock)
 {
     int score = 0;
     list<Block> blocks;
@@ -258,15 +302,17 @@ void Game(RenderWindow &window, sf::Clock clock)
     line.move(ScreenX - 200, 0.f);
     line.setFillColor(sf::Color::Black);
     Platform p(sf::Vector2f(200.f, 20.f), sf::Vector2f(0.f, 880.f), PlatformColor, 10.f);
-    Ball b(5, sf::Vector2f((float)ScreenX/2, (float)ScreenY/2), sf::Color::Black);
-    
+    Ball b(5, sf::Vector2f((float)ScreenX / 2, (float)ScreenY / 2), sf::Color::Black);
     while (window.isOpen())
     {
         Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
-                {cout << "quit2" << endl;window.close();}
+            {
+                cout << "quit2" << endl;
+                window.close();
+            }
             if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left)))
                 p.direction = -1;
             else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right)))
@@ -294,19 +340,22 @@ void Game(RenderWindow &window, sf::Clock clock)
         window.draw(line);
         window.draw(p.platform);
         window.draw(b.ball);
+        if(b.y() > ScreenY){
+            return score;
+        }
         for (list<Block>::iterator it = blocks.begin(); it != blocks.end(); it++)
         {
             window.draw((*it).block);
         }
         WriteScore(window, score);
         window.display();
-        // cout << p.x() << endl;
-        cout << "ball position" <<b.x() << ", " << b.y() << endl; 
     }
 }
 
+
 void Menu(RenderWindow &window)
 {
+
     sf::Text text;
     vector<string> options = {"Play", "Settings", "Records", "Quit"};
     sf::Font font;
@@ -315,24 +364,21 @@ void Menu(RenderWindow &window)
     text.setFont(font);
     text.setStyle(sf::Text::Bold);
     text.setCharacterSize(80);
+    clearEventsQueue(window);
     while (window.isOpen())
     {
         Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed){
-                cout << "quit3" << endl;window.close();}
+            if (event.type == sf::Event::Closed)
+                window.close();
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) and (opt < 3))
             {
                 opt++;
-                cout << "down";
-                cout << opt << endl;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) and (opt > 0))
             {
                 opt--;
-                cout << "up";
-                cout << opt << endl;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
             {
@@ -352,29 +398,44 @@ void Menu(RenderWindow &window)
                 }
                 window.display();
             }
-            
         }
     }
 }
 
 int main()
-{   
-    
+{
+    int i = 1;
     sf::Clock clock;
     RenderWindow window(sf::VideoMode(ScreenX, ScreenY), "Arkanoid");
     window.setFramerateLimit(60);
-    while(1){
-    Menu(window);
-    switch (opt){
-    case 0:
-        Game(window, clock);
-    case 1:
-        PlatformColorChoice(window);
-    case 2:{
-        cout << "readScore" << endl;
-        readScore(window);
-    }
+    while (opt != 3)
+    {
+        Menu(window);
+        switch (opt)
+        {
+        case 0:
+        {
+            int finalScore = Game(window, clock);
+            lose(finalScore, window);
+            break;
+        }
+        case 1:
+        {
+            PlatformColorChoice(window);
+            break;
+        }
+        case 2:
+        {
+            readScore(window);
+            break;
+        }
+        case 3:
+        {
+            //cout << "closing window" << endl;
+            window.close();
+            //break;
+        }
+        }
     }
     return 0;
-}
 }
