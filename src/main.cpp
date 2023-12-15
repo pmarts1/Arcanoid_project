@@ -215,7 +215,7 @@ bool ask(RenderWindow &window, int score)
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
                 {
-                    return 1;
+                    return 0;
                 }
             }
         }
@@ -418,7 +418,7 @@ void showScoreTable(RenderWindow &window)
     font.loadFromFile("freesansbold.ttf");
     text.setFont(font);
     text.setStyle(sf::Text::Bold);
-    text.setCharacterSize(100);
+    text.setCharacterSize(50);
     window.clear(sf::Color::White);
     if (in.is_open())
     {
@@ -427,7 +427,7 @@ void showScoreTable(RenderWindow &window)
         {
             i++;
             text.setString(line);
-            text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, i * 100);
+            text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, i * ScreenY/12);
             window.draw(text);
         }
     }
