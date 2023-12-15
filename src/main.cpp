@@ -1,6 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <vector>
 #include <list>
 #include <fstream>
@@ -53,6 +54,7 @@ public:
     float height;
     Block(const sf::Vector2f &size, const sf::Vector2f &position, const sf::Color &color)
     {
+
         block.setSize(size);
         block.setFillColor(color);
         block.setPosition(position);
@@ -75,11 +77,28 @@ struct Ball
 public:
     sf::CircleShape ball;
     sf::Vector2f velocity = Vector2f(-4.f, -4.f);
+    sf::Sound sound;
+    sf::SoundBuffer buffer;
     Ball(float r, const sf::Vector2f start_position, const sf::Color &color)
     {
         ball.setRadius(r);
         ball.setFillColor(color);
         ball.setPosition(start_position);
+
+        if (!buffer.loadFromFile("beep.wav"))
+        {
+            cout << "Error";
+        }
+        sound.setBuffer(buffer);
+        std::ifstream file("volume.txt");
+        if (file.is_open())
+        {
+            std::string line;
+            std::getline(file, line);
+            sound.setVolume(stoi(line));
+            cout << stoi(line);
+            file.close();
+        }
     };
     void Update(float dt)
     {
@@ -99,6 +118,8 @@ public:
         if (fabs(pl.x() + pl.length / 2 - this->x()) < pl.length / 2 and fabs((this->y() - 860)) < 5 and velocity.y > 0)
         {
             velocity = Vector2f(velocity.x, -velocity.y);
+
+            sound.play();
         }
     }
     void Colision()
@@ -220,6 +241,7 @@ bool ask(RenderWindow &window, int score)
             }
         }
     }
+    return 0;
 }
 
 string enterNickname(RenderWindow &window)
@@ -272,7 +294,6 @@ string enterNickname(RenderWindow &window)
 }
 void saveScore(RenderWindow &window, int score, string nickName)
 {
-
     if (searchPosition(score) != -1)
     {
         int pos = searchPosition(score);
@@ -334,12 +355,51 @@ void WriteScore(RenderWindow &window, int score)
     window.draw(text);
 }
 
-void PlatformColorChoice(RenderWindow &window)
+void Settings(RenderWindow &window)
 {
+    clearEventsQueue(window);
     vector<sf::Color> clrs = {sf::Color::Black, sf::Color::Blue, sf::Color::Cyan, sf::Color::Green, sf::Color::Magenta, sf::Color::Red};
+    sf::RectangleShape line(sf::Vector2f(ScreenX / 5, 5.f));
+    line.setFillColor(sf::Color::Black);
+    line.setPosition(ScreenX / 2 - ScreenX / 10, ScreenY / 2 + 100);
+    int volume = 0;
+    std::ifstream file("volume.txt");
+    if (file.is_open())
+    {
+        std::string line;
+        std::getline(file, line);
+        volume = stoi(line);
+        file.close();
+    }
+    sf::RectangleShape rect(sf::Vector2f(20.f, 20.f));
+    rect.setFillColor(sf::Color::Black);
+    rect.setPosition(ScreenX / 2 - ScreenX / 10 + (ScreenX / 2 - ScreenX / 10) * volume / 200, ScreenY / 2 + 100 - 7);
+    sf::Text text;
+    sf::Text text2;
+    sf::Font font;
+    text.setFillColor(sf::Color::Black);
+    font.loadFromFile("freesansbold.ttf");
+    text.setFont(font);
+    text.setStyle(sf::Text::Bold);
+    text.setCharacterSize(50);
+    text.setString("Platform color");
+    text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, 50);
+
+    text2.setFillColor(sf::Color::Black);
+    text2.setFont(font);
+    text2.setStyle(sf::Text::Bold);
+    text2.setCharacterSize(50);
+    text2.setString("Volume");
+    text2.setPosition(ScreenX / 2 - text2.getLocalBounds().width / 2, ScreenY / 2);
     while (window.isOpen())
     {
         window.clear(sf::Color::White);
+
+        window.draw(line);
+
+        window.draw(text);
+        window.draw(text2);
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -357,13 +417,35 @@ void PlatformColorChoice(RenderWindow &window)
                         if (globalPosition.x > (ScreenX / 7 * (i + 1) - 50) and globalPosition.x < (ScreenX / 7 * (i + 1) + 50))
                         {
                             PlatformColor = clrs[i];
-                            return;
                         }
                     }
                 }
+                if (globalPosition.y > (ScreenY / 2 + 80) and globalPosition.y < (ScreenY / 2 + 120))
+                {
+                    if (globalPosition.x > (ScreenX / 2 - ScreenX / 10 -10) and globalPosition.x < (ScreenX / 2 - ScreenX / 10 + ScreenX / 5))
+                    {
+                        rect.setPosition(globalPosition.x, ScreenY / 2 + 100 - 7);
+                    }
+                }
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+            {
+                std::ofstream file("volume.txt");
+                if (file.is_open())
+                {
+                    string line = to_string((rect.getPosition().x - (ScreenX / 2 - ScreenX / 10))/3);
+                    if((rect.getPosition().x - (ScreenX / 2 - ScreenX / 10))/3 < 1){
+                        line = to_string(0);
+                    }if((rect.getPosition().x - (ScreenX / 2 - ScreenX / 10))/3 > 100){
+                        line = to_string(100);
+                    }
+                    file << line;
+                }
+                file.close();
+                return;
             }
         }
-
+        window.draw(rect);
         vector<sf::CircleShape> circles;
         for (int i = 0; i < 6; i++)
         {
@@ -427,7 +509,7 @@ void showScoreTable(RenderWindow &window)
         {
             i++;
             text.setString(line);
-            text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, i * ScreenY/12);
+            text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, i * ScreenY / 12);
             window.draw(text);
         }
     }
@@ -457,13 +539,14 @@ int Game(RenderWindow &window, sf::Clock clock)
     for (int j = 0; j < 5; j++)
     {
         float h = 50 * j;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 12; i++)
         {
             float x = 110 * i;
             blocks.push_back(Block(sf::Vector2f(100.f, 40.f), sf::Vector2f(x, h), sf::Color::Magenta));
         }
     }
     float timer;
+
     timer = clock.restart().asMilliseconds();
     float time_k = 0.1;
     float time = 0;
@@ -508,6 +591,7 @@ int Game(RenderWindow &window, sf::Clock clock)
         window.draw(line);
         window.draw(p.platform);
         window.draw(b.ball);
+
         if (b.y() > ScreenY)
         {
             return score;
@@ -519,11 +603,11 @@ int Game(RenderWindow &window, sf::Clock clock)
         WriteScore(window, score);
         window.display();
     }
+    return 5;
 }
 
 void Menu(RenderWindow &window)
 {
-
     sf::Text text;
     vector<string> options = {"Play", "Settings", "Records", "Quit"};
     sf::Font font;
@@ -589,12 +673,11 @@ int main()
             {
                 saveScore(window, finalScore, enterNickname(window));
             }
-            // lose(finalScore, window);
             break;
         }
         case 1:
         {
-            PlatformColorChoice(window);
+            Settings(window);
             break;
         }
         case 2:
