@@ -49,5 +49,6 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "set": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/src"
 }

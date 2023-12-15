@@ -1,0 +1,53 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"sfml_add_library"
+		],
+		"files" : 
+		[
+			"/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-src/cmake/Macros.cmake",
+			"/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-src/src/SFML/System/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 89,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 197,
+				"parent" : 1
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "devel",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"_deps/sfml-build/lib/libsfml-system-s-d.a"
+			],
+			"targetId" : "sfml-system::@8cb1db2982443611e568",
+			"targetIndex" : 4,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/sfml-build/src/SFML/System",
+		"source" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-src/src/SFML/System"
+	}
+}

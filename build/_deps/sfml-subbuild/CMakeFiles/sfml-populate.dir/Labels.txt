@@ -1,0 +1,14 @@
+# Target labels
+ sfml-populate
+# Source files and their labels
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/CMakeFiles/sfml-populate
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/CMakeFiles/sfml-populate.rule
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/CMakeFiles/sfml-populate-complete.rule
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build.rule
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure.rule
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-download.rule
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install.rule
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-mkdir.rule
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch.rule
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test.rule
+/home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update.rule

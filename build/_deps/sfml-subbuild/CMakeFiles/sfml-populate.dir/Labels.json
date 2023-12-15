@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/CMakeFiles/sfml-populate"
+		},
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/CMakeFiles/sfml-populate.rule"
+		},
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/CMakeFiles/sfml-populate-complete.rule"
+		},
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build.rule"
+		},
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure.rule"
+		},
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-download.rule"
+		},
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install.rule"
+		},
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch.rule"
+		},
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test.rule"
+		},
+		{
+			"file" : "/home/admin1/Desktop/\u041c\u0424\u0422\u0418/\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430/c++/2kurs/Arkanoid/build/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"sfml-populate"
+		],
+		"name" : "sfml-populate"
+	}
+}

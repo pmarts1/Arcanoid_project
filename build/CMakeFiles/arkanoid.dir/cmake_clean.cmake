@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/arkanoid.dir/main.cpp.o"
   "CMakeFiles/arkanoid.dir/main.cpp.o.d"
-  "arkanoid"
-  "arkanoid.pdb"
+  "bin/arkanoid"
+  "bin/arkanoid.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

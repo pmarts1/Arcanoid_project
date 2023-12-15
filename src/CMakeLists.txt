@@ -11,9 +11,16 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
-target_link_libraries(CMakeSFMLProject PRIVATE sfml-audio)
-target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
 
 
-install(TARGETS CMakeSFMLProject)
+SET( clearEventsQueue.hpp
+   )
+   SET( clearEventsQueue.cpp
+   )
+
+   target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
+   target_link_libraries(CMakeSFMLProject PRIVATE sfml-audio)
+   target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
+   
+   
+   install(TARGETS CMakeSFMLProject)

@@ -1,0 +1,11 @@
+_deps/sfml-build/src/SFML/Audio/CMakeFiles/sfml-audio.dir/SoundSource.cpp.o: \
+ /home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-src/src/SFML/Audio/SoundSource.cpp \
+ /usr/include/stdc-predef.h \
+ /home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-src/include/SFML/Audio/SoundSource.hpp \
+ /home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-src/include/SFML/Audio/Export.hpp \
+ /home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-src/include/SFML/Config.hpp \
+ /home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-src/include/SFML/Audio/AlResource.hpp \
+ /home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-src/include/SFML/System/Vector3.hpp \
+ /home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-src/include/SFML/System/Vector3.inl \
+ /home/admin1/Desktop/МФТИ/Информатика/c++/2kurs/Arkanoid/build/_deps/sfml-src/src/SFML/Audio/ALCheck.hpp \
+ /usr/include/AL/al.h /usr/include/AL/alc.h

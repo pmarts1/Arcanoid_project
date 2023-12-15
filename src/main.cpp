@@ -5,8 +5,9 @@
 #include <vector>
 #include <list>
 #include <fstream>
+//#include "clearEventsQueue.hpp"
 using namespace std;
-using namespace sf;
+//using namespace sf;
 #define ScreenX 1600
 #define ScreenY 900
 
@@ -76,7 +77,7 @@ struct Ball
 {
 public:
     sf::CircleShape ball;
-    sf::Vector2f velocity = Vector2f(-4.f, -4.f);
+    sf::Vector2f velocity = sf::Vector2f(-4.f, -4.f);
     sf::Sound sound;
     sf::SoundBuffer buffer;
     Ball(float r, const sf::Vector2f start_position, const sf::Color &color)
@@ -117,7 +118,7 @@ public:
     {
         if (fabs(pl.x() + pl.length / 2 - this->x()) < pl.length / 2 and fabs((this->y() - 860)) < 5 and velocity.y > 0)
         {
-            velocity = Vector2f(velocity.x, -velocity.y);
+            velocity = sf::Vector2f(velocity.x, -velocity.y);
 
             sound.play();
         }
@@ -126,15 +127,15 @@ public:
     {
         if (this->x() > ScreenX - 200)
         {
-            velocity = Vector2f(-velocity.x, velocity.y);
+            velocity = sf::Vector2f(-velocity.x, velocity.y);
         }
         if (this->x() < 0)
         {
-            velocity = Vector2f(-velocity.x, velocity.y);
+            velocity = sf::Vector2f(-velocity.x, velocity.y);
         }
         if (this->y() < 0)
         {
-            velocity = Vector2f(velocity.x, -velocity.y);
+            velocity = sf::Vector2f(velocity.x, -velocity.y);
         }
     }
     bool Colision(Block &bl)
@@ -144,15 +145,15 @@ public:
             // bl.block.setFillColor(sf::Color::Yellow);
             if (this->x() - (bl.x() + bl.length / 2) > bl.length / bl.height * fabs(this->y() - (bl.y() + bl.height / 2)))
             {
-                velocity = Vector2f(-velocity.x, velocity.y);
+                velocity = sf::Vector2f(-velocity.x, velocity.y);
             }
             else if (-(this->x() - (bl.x() + bl.length / 2)) > bl.length / bl.height * fabs(this->y() - (bl.y() + bl.height / 2)))
             {
-                velocity = Vector2f(-velocity.x, velocity.y);
+                velocity = sf::Vector2f(-velocity.x, velocity.y);
             }
             else
             {
-                velocity = Vector2f(velocity.x, -velocity.y);
+                velocity = sf::Vector2f(velocity.x, -velocity.y);
             }
             return 1;
         }
@@ -160,11 +161,10 @@ public:
     }
 };
 
-void clearEventsQueue(RenderWindow &window)
+void clearEventsQueue(sf::RenderWindow &window)
 {
     sf::Event event;
-    while (window.pollEvent(event))
-        ;
+    while (window.pollEvent(event));
 }
 
 int minScore()
@@ -204,7 +204,7 @@ int searchPosition(int score)
     return -1;
 }
 
-bool ask(RenderWindow &window, int score)
+bool ask(sf::RenderWindow &window, int score)
 {
     if (searchPosition(score) != -1)
     {
@@ -223,7 +223,7 @@ bool ask(RenderWindow &window, int score)
         window.display();
         while (1)
         {
-            Event event;
+            sf::Event event;
             while (window.pollEvent(event))
             {
                 if (event.type == sf::Event::Closed)
@@ -244,7 +244,7 @@ bool ask(RenderWindow &window, int score)
     return 0;
 }
 
-string enterNickname(RenderWindow &window)
+string enterNickname(sf::RenderWindow &window)
 {
     string str;
     window.clear(sf::Color::White);
@@ -262,7 +262,7 @@ string enterNickname(RenderWindow &window)
     clearEventsQueue(window);
     while (1)
     {
-        Event event;
+        sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -292,7 +292,7 @@ string enterNickname(RenderWindow &window)
         }
     }
 }
-void saveScore(RenderWindow &window, int score, string nickName)
+void saveScore(sf::RenderWindow &window, int score, string nickName)
 {
     if (searchPosition(score) != -1)
     {
@@ -341,7 +341,7 @@ void saveScore(RenderWindow &window, int score, string nickName)
     }
 }
 
-void WriteScore(RenderWindow &window, int score)
+void WriteScore(sf::RenderWindow &window, int score)
 {
     sf::Text text;
     sf::Font font;
@@ -355,7 +355,7 @@ void WriteScore(RenderWindow &window, int score)
     window.draw(text);
 }
 
-void Settings(RenderWindow &window)
+void Settings(sf::RenderWindow &window)
 {
     clearEventsQueue(window);
     vector<sf::Color> clrs = {sf::Color::Black, sf::Color::Blue, sf::Color::Cyan, sf::Color::Green, sf::Color::Magenta, sf::Color::Red};
@@ -422,7 +422,7 @@ void Settings(RenderWindow &window)
                 }
                 if (globalPosition.y > (ScreenY / 2 + 80) and globalPosition.y < (ScreenY / 2 + 120))
                 {
-                    if (globalPosition.x > (ScreenX / 2 - ScreenX / 10 -10) and globalPosition.x < (ScreenX / 2 - ScreenX / 10 + ScreenX / 5))
+                    if (globalPosition.x > (ScreenX / 2 - ScreenX / 10 - 10) and globalPosition.x < (ScreenX / 2 - ScreenX / 10 + ScreenX / 5))
                     {
                         rect.setPosition(globalPosition.x, ScreenY / 2 + 100 - 7);
                     }
@@ -433,10 +433,13 @@ void Settings(RenderWindow &window)
                 std::ofstream file("volume.txt");
                 if (file.is_open())
                 {
-                    string line = to_string((rect.getPosition().x - (ScreenX / 2 - ScreenX / 10))/3);
-                    if((rect.getPosition().x - (ScreenX / 2 - ScreenX / 10))/3 < 1){
+                    string line = to_string((rect.getPosition().x - (ScreenX / 2 - ScreenX / 10)) / 3);
+                    if ((rect.getPosition().x - (ScreenX / 2 - ScreenX / 10)) / 3 < 1)
+                    {
                         line = to_string(0);
-                    }if((rect.getPosition().x - (ScreenX / 2 - ScreenX / 10))/3 > 100){
+                    }
+                    if ((rect.getPosition().x - (ScreenX / 2 - ScreenX / 10)) / 3 > 100)
+                    {
                         line = to_string(100);
                     }
                     file << line;
@@ -458,7 +461,7 @@ void Settings(RenderWindow &window)
     }
 }
 
-void lose(int score, RenderWindow &window)
+void lose(int score, sf::RenderWindow &window)
 {
     window.clear(sf::Color::White);
     sf::Text text;
@@ -490,7 +493,7 @@ void lose(int score, RenderWindow &window)
     }
 }
 
-void showScoreTable(RenderWindow &window)
+void showScoreTable(sf::RenderWindow &window)
 {
     std::ifstream in("score.txt");
     std::string line;
@@ -532,7 +535,7 @@ void showScoreTable(RenderWindow &window)
     }
 }
 
-int Game(RenderWindow &window, sf::Clock clock)
+int Game(sf::RenderWindow &window, sf::Clock clock)
 {
     int score = 0;
     list<Block> blocks;
@@ -557,7 +560,7 @@ int Game(RenderWindow &window, sf::Clock clock)
     Ball b(5, sf::Vector2f((float)ScreenX / 2, (float)ScreenY / 2), sf::Color::Black);
     while (window.isOpen())
     {
-        Event event;
+        sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -606,7 +609,7 @@ int Game(RenderWindow &window, sf::Clock clock)
     return 5;
 }
 
-void Menu(RenderWindow &window)
+void Menu(sf::RenderWindow &window)
 {
     sf::Text text;
     vector<string> options = {"Play", "Settings", "Records", "Quit"};
@@ -619,7 +622,7 @@ void Menu(RenderWindow &window)
     clearEventsQueue(window);
     while (window.isOpen())
     {
-        Event event;
+        sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -659,7 +662,7 @@ int main()
     cout << minScore();
     int i = 1;
     sf::Clock clock;
-    RenderWindow window(sf::VideoMode(ScreenX, ScreenY), "Arkanoid");
+    sf::RenderWindow window(sf::VideoMode(ScreenX, ScreenY), "Arkanoid");
     window.setFramerateLimit(60);
     while (opt != 3)
     {
