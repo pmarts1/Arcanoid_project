@@ -142,9 +142,183 @@ public:
 void clearEventsQueue(RenderWindow &window)
 {
     sf::Event event;
-    while (window.pollEvent(event));
+    while (window.pollEvent(event))
+        ;
 }
 
+int minScore()
+{
+    int min = 9999999;
+    std::ifstream file("score.txt");
+    if (file.is_open())
+    {
+        std::string line;
+        while (std::getline(file, line))
+        {
+            string score = line.substr(line.find(" "), line.length());
+            if (min > stoi(score))
+                min = stoi(score);
+        }
+        file.close();
+    }
+    return min;
+}
+
+int searchPosition(int score)
+{
+    int position = 0;
+    std::ifstream file("score.txt");
+    if (file.is_open())
+    {
+        std::string line;
+        while (std::getline(file, line))
+        {
+            string scoreRead = line.substr(line.find(" "), line.length());
+            if (score > stoi(scoreRead))
+                return position;
+            position++;
+        }
+        file.close();
+    }
+    return -1;
+}
+
+bool ask(RenderWindow &window, int score)
+{
+    if (searchPosition(score) != -1)
+    {
+        window.clear(sf::Color::White);
+        sf::Text text;
+        sf::Font font;
+        text.setFillColor(sf::Color::Black);
+        font.loadFromFile("freesansbold.ttf");
+        text.setFont(font);
+        text.setStyle(sf::Text::Bold);
+        text.setCharacterSize(50);
+        text.setString("Do you want to save your score = " + to_string(score) + "?" + "(y/n)");
+
+        text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, 200);
+        window.draw(text);
+        window.display();
+        while (1)
+        {
+            Event event;
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                {
+                    window.close();
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
+                {
+                    return 1;
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
+                {
+                    return 1;
+                }
+            }
+        }
+    }
+}
+
+string enterNickname(RenderWindow &window)
+{
+    string str;
+    window.clear(sf::Color::White);
+    sf::Text text;
+    sf::Font font;
+    text.setFillColor(sf::Color::Black);
+    font.loadFromFile("freesansbold.ttf");
+    text.setFont(font);
+    text.setStyle(sf::Text::Bold);
+    text.setCharacterSize(100);
+    text.setString("Enter nickname: ");
+    text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, 200);
+    window.draw(text);
+    window.display();
+    clearEventsQueue(window);
+    while (1)
+    {
+        Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
+            if (event.type == sf::Event::TextEntered)
+            {
+                str += static_cast<char>(event.text.unicode);
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+            {
+                cout << str << endl;
+                return str;
+            }
+            sf::Text text2;
+            text2.setFillColor(sf::Color::Black);
+            text2.setFont(font);
+            text2.setStyle(sf::Text::Bold);
+            text2.setCharacterSize(100);
+            text2.setString(str);
+            text2.setPosition(ScreenX / 2 - text2.getLocalBounds().width / 2, 300);
+            window.draw(text);
+            window.draw(text2);
+            window.display();
+            window.clear(sf::Color::White);
+        }
+    }
+}
+void saveScore(RenderWindow &window, int score, string nickName)
+{
+
+    if (searchPosition(score) != -1)
+    {
+        int pos = searchPosition(score);
+        window.clear(sf::Color::White);
+        sf::Text text;
+        sf::Font font;
+        text.setFillColor(sf::Color::Black);
+        font.loadFromFile("freesansbold.ttf");
+        text.setFont(font);
+        text.setStyle(sf::Text::Bold);
+        text.setCharacterSize(100);
+        text.setString(to_string(score));
+        text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, 200);
+        window.draw(text);
+        window.display();
+        cout << "nbyghubhhujn";
+        vector<string> newFile;
+        std::fstream file("score.txt");
+        if (file.is_open())
+        {
+            cout << "starting";
+            string line;
+            for (int i = 0; i < 9; i++)
+            {
+                std::getline(file, line);
+                newFile.push_back(line);
+            }
+            for (int i = 0; i < 9; i++)
+            {
+                cout << newFile[i] << endl;
+            }
+            file.close();
+            std::fstream file("score.txt", ios::out);
+            for (int i = 0; i < pos; i++)
+            {
+                file << newFile[i] << endl;
+            }
+            file << nickName << " " << score << endl;
+            for (int i = pos; i < 9; i++)
+            {
+                file << newFile[i] << endl;
+            }
+        }
+        file.close();
+    }
+}
 
 void WriteScore(RenderWindow &window, int score)
 {
@@ -171,7 +345,6 @@ void PlatformColorChoice(RenderWindow &window)
         {
             if (event.type == sf::Event::Closed)
             {
-                cout << "quit1" << endl;
                 window.close();
             }
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -214,14 +387,14 @@ void lose(int score, RenderWindow &window)
     text.setStyle(sf::Text::Bold);
     text.setCharacterSize(100);
     text.setString(to_string(score));
-    text.setPosition(ScreenX/2 - text.getLocalBounds().width / 2, 200);
+    text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, 200);
     window.draw(text);
     window.display();
-    
     clearEventsQueue(window);
     sf::Event event;
-    while(1){
-    while (window.pollEvent(event))
+    while (1)
+    {
+        while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
             {
@@ -235,7 +408,7 @@ void lose(int score, RenderWindow &window)
     }
 }
 
-void readScore(RenderWindow &window)
+void showScoreTable(RenderWindow &window)
 {
     std::ifstream in("score.txt");
     std::string line;
@@ -247,14 +420,12 @@ void readScore(RenderWindow &window)
     text.setStyle(sf::Text::Bold);
     text.setCharacterSize(100);
     window.clear(sf::Color::White);
-
     if (in.is_open())
     {
         int i = 0;
         while (std::getline(in, line))
         {
             i++;
-
             text.setString(line);
             text.setPosition(ScreenX / 2 - text.getLocalBounds().width / 2, i * 100);
             window.draw(text);
@@ -269,7 +440,6 @@ void readScore(RenderWindow &window)
         {
             if (event.type == sf::Event::Closed)
             {
-                cout << "quit1" << endl;
                 window.close();
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
@@ -279,7 +449,6 @@ void readScore(RenderWindow &window)
         }
     }
 }
-
 
 int Game(RenderWindow &window, sf::Clock clock)
 {
@@ -310,7 +479,6 @@ int Game(RenderWindow &window, sf::Clock clock)
         {
             if (event.type == sf::Event::Closed)
             {
-                cout << "quit2" << endl;
                 window.close();
             }
             if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left)))
@@ -340,7 +508,8 @@ int Game(RenderWindow &window, sf::Clock clock)
         window.draw(line);
         window.draw(p.platform);
         window.draw(b.ball);
-        if(b.y() > ScreenY){
+        if (b.y() > ScreenY)
+        {
             return score;
         }
         for (list<Block>::iterator it = blocks.begin(); it != blocks.end(); it++)
@@ -351,7 +520,6 @@ int Game(RenderWindow &window, sf::Clock clock)
         window.display();
     }
 }
-
 
 void Menu(RenderWindow &window)
 {
@@ -404,6 +572,7 @@ void Menu(RenderWindow &window)
 
 int main()
 {
+    cout << minScore();
     int i = 1;
     sf::Clock clock;
     RenderWindow window(sf::VideoMode(ScreenX, ScreenY), "Arkanoid");
@@ -416,7 +585,11 @@ int main()
         case 0:
         {
             int finalScore = Game(window, clock);
-            lose(finalScore, window);
+            if (ask(window, finalScore) == 1)
+            {
+                saveScore(window, finalScore, enterNickname(window));
+            }
+            // lose(finalScore, window);
             break;
         }
         case 1:
@@ -426,14 +599,13 @@ int main()
         }
         case 2:
         {
-            readScore(window);
+            showScoreTable(window);
             break;
         }
         case 3:
         {
-            //cout << "closing window" << endl;
             window.close();
-            //break;
+            break;
         }
         }
     }
